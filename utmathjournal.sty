@@ -1,0 +1,119 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{utmathjournal}[2019/01/21 Custom Package]
+
+% Packages
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{amsthm}
+\RequirePackage{comment} % allows for block commenting text
+\RequirePackage{enumitem}
+\RequirePackage{fancyhdr} % allows for header and footer customization
+\RequirePackage{float}
+\RequirePackage[headheight=15pt,hmarginratio=1:1]{geometry} % sets margin parameters
+\RequirePackage{graphicx}
+\RequirePackage{hyperref}
+\RequirePackage{import} % provides \import{}{} command, which fixes some issues with \include and \input
+\RequirePackage{indentfirst}
+\RequirePackage{lettrine} % provides lettrine, which is the first enlarged letter at the beginning of the text
+\RequirePackage{microtype} % slightly tweaks font spacing for aesthetics
+\RequirePackage{multicol} % allows for dynamic customization of number of columns
+\RequirePackage{tabu} % allows for creation of tables inside math mode
+\RequirePackage{tcolorbox} % allows for creation and customization of boxed content
+\RequirePackage{tikz} % allows for creation of commutative diagrams
+\RequirePackage{tikz-cd}
+\RequirePackage{titlesec} % allows for customization of titles
+\RequirePackage{titletoc} % allows for customization of table of contents
+\RequirePackage{url}
+\RequirePackage{xcolor}
+
+\RequirePackage{pagecolor} % allows for customization of page color (must be loaded after xcolor package)
+
+% Enable tikz features
+\usetikzlibrary{arrows, calc, matrix}
+
+% Set hyperlink parameters
+\hypersetup{
+    colorlinks,
+    citecolor=gray,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=magenta
+}
+
+% Fix abstract display
+\def\abstract{
+    \begin{center}%
+        {\bfseries \abstractname\vspace{-.5em}}%
+    \end{center}
+    \quotation
+}
+\def\endabstract{\par
+    \endquotation
+}
+
+% Suppress display of chapter numbers
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\theequation}{\arabic{equation}}
+\renewcommand{\thefigure}{\arabic{figure}}
+\renewcommand{\thetable}{\arabic{table}}
+% footnote counter is by default reset at the start of each new chapter
+
+% Assorted aesthetic tweaks
+\linespread{1.05} % increase line spacing
+\setlist[itemize]{noitemsep} % makes itemize lists more compact
+
+% Manage headers and footers
+\pagestyle{fancy} % give all pages headers and footers
+\fancyhead{} % set default header to blank
+\fancyfoot{} % set default footer to blank
+\fancyhead[roh,leh]{\thepage} % place page numbers on the right of odd pages and left of even pages
+
+% New theorems
+\newtheorem{claim}{Claim}[section]
+\newtheorem*{claim*}{Claim}
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem*{corollary*}{Corollary}
+\newtheorem{definition}{Definition}[section]
+\newtheorem*{definition*}{Definition}
+\newtheorem{example}{Example}[section]
+\newtheorem*{example*}{Example}
+\newtheorem{exercise}{Exercise}[section]
+\newtheorem*{exercise*}{Exercise}
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem*{lemma*}{Lemma}
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem*{proposition*}{Proposition}
+\newtheorem{remark}{Remark}[section]
+\newtheorem*{remark*}{Remark}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem*{theorem*}{Theorem}
+
+% Blackboard bold
+\newcommand{\C}{\mathbb{C}} % field of complex numbers
+\newcommand{\CP}{\mathbb{CP}} % complex projective space
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\N}{\mathbb{N}} % set of natural numbers
+\newcommand{\Q}{\mathbb{Q}} % field of rational numbers
+\newcommand{\R}{\mathbb{R}} % field of real numbers
+\newcommand{\RP}{\mathbb{RP}} % real projective space
+\newcommand{\Z}{\mathbb{Z}} % set of integers
+
+% Math operators
+\DeclareMathOperator{\Aut}{Aut} % automorphism
+\DeclareMathOperator{\End}{End} % endomorphism
+\DeclareMathOperator{\Gal}{Gal} % Galois group
+\DeclareMathOperator{\GL}{GL} % general linear group
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\id}{id} % identity
+\DeclareMathOperator{\im}{im} % image
+\DeclareMathOperator{\lcm}{lcm} % least common multiple
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\SL}{SL} % special linear group
+\DeclareMathOperator{\Span}{Span}
+\DeclareMathOperator{\Spec}{Spec} % spectrum
+\DeclareMathOperator{\tr}{tr} % trace
+
+% Renewed commands
+\renewcommand{\qedsymbol}{$\blacksquare$}
+
+\endinput

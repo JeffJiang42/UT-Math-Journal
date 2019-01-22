@@ -1,0 +1,204 @@
+%% Shout-out to Ulf Lindgren and his package fncychap for providing inspiration for this package -- much of the code is ripped straight from fncychap
+
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\ProvidesPackage{fancychap}[2019/01/21 Custom Package]
+
+%%%% For conditional inclusion of color
+\newif\ifusecolor
+\usecolorfalse
+
+%%%% DEFINITION OF Chapapp variables
+\newcommand{\CNV}{\huge\bfseries}
+\newcommand{\ChNameVar}[1]{\renewcommand{\CNV}{#1}}
+
+%%%% DEFINITION OF TheChapter variables
+\newcommand{\CNoV}{\huge\bfseries}
+\newcommand{\ChNumVar}[1]{\renewcommand{\CNoV}{#1}}
+
+\newif\ifUCN
+\UCNfalse
+\newif\ifLCN
+\LCNfalse
+\def\ChNameLowerCase{\LCNtrue\UCNfalse}
+\def\ChNameUpperCase{\UCNtrue\LCNfalse}
+\def\ChNameAsIs{\UCNfalse\LCNfalse}
+
+%%%%% Fix for AMSBook 971008
+
+\@ifundefined{@chapapp}{\let\@chapapp\chaptername}{}
+
+%%%%% Fix for Bjarne and appendix 980211
+
+\newif\ifinapp
+\inappfalse
+\renewcommand\appendix{\par
+  \setcounter{chapter}{0}%
+  \setcounter{section}{0}%
+  \inapptrue%
+  \renewcommand\@chapapp{\appendixname}%
+  \renewcommand\thechapter{\@Alph\c@chapter}}
+
+%%%%% Fix for frontmatter, mainmatter, and backmatter 040920
+
+\@ifundefined{@mainmatter}{\newif\if@mainmatter \@mainmattertrue}{}
+
+%%%%%
+
+\newcommand{\FmN}[1]{%
+\ifUCN
+   {\MakeUppercase{#1}}\LCNfalse
+\else
+   \ifLCN
+      {\MakeLowercase{#1}}\UCNfalse
+   \else #1
+   \fi
+\fi}
+
+%%%% DEFINITION OF Title variables
+\newcommand{\CTV}{\Huge\bfseries}
+\newcommand{\ChTitleVar}[1]{\renewcommand{\CTV}{#1}}
+
+%%%% DEFINITION OF the basic rule width
+\newlength{\RW}
+\setlength{\RW}{1pt}
+\newcommand{\ChRuleWidth}[1]{\setlength{\RW}{#1}}
+
+\newif\ifUCT
+\UCTfalse
+\newif\ifLCT
+\LCTfalse
+\def\ChTitleLowerCase{\LCTtrue\UCTfalse}
+\def\ChTitleUpperCase{\UCTtrue\LCTfalse}
+\def\ChTitleAsIs{\UCTfalse\LCTfalse}
+\newcommand{\FmTi}[1]{%
+\ifUCT
+   {\MakeUppercase{#1}}\LCTfalse
+\else
+   \ifLCT
+      {\MakeLowercase{#1}}\UCTfalse
+   \else {#1}
+   \fi
+\fi}
+
+\newlength{\mylen}
+\newlength{\myhi}
+\newlength{\px}
+\newlength{\py}
+\newlength{\pyy}
+\newlength{\pxx}
+
+\def\mghrulefill#1{\leavevmode\leaders\hrule\@height #1\hfill\kern\z@}
+
+\newcommand{\DOCH}{%
+  \CNV\FmN{\@chapapp}\space \CNoV\thechapter
+  \par\nobreak
+  \vskip 20\p@
+  }
+\newcommand{\DOTI}[1]{%
+    \CTV\FmTi{#1}\par\nobreak
+    \vskip 40\p@
+    }
+\newcommand{\DOTIS}[1]{%
+    \CTV\FmTi{#1}\par\nobreak
+    \vskip 40\p@
+    }
+    
+%%%%%%% Definition of MyBox option
+
+\DeclareOption{MyBox}{%
+
+  \ChNameUpperCase
+  \ChTitleAsIs
+  \ChNameVar{\centering\Large\normalfont\rmfamily}
+  \ChNumVar{\Huge}
+  \ChTitleVar{\centering\Huge\normalfont\rmfamily}
+  \ChRuleWidth{1pt}
+  \renewcommand{\DOCH}{%
+    \settoheight{\py}{\CNoV\thechapter}
+    \parskip=0pt plus 1pt % Set parskip to default, just in case v1.31
+    \addtolength{\py}{-1pt}
+    \CNV\FmN{\@chapapp}\par\nobreak
+    \vskip 5\p@
+    \setlength{\myhi}{2\baselineskip}
+    \setlength{\px}{\myhi}
+    \addtolength{\px}{-1\RW}
+    \rule[-1\px]{\RW}{\myhi}\mghrulefill{\RW}\hskip
+    10pt\raisebox{-0.5\py}{\CNoV\thechapter}\hskip 10pt\mghrulefill{\RW}\rule[-1\px]{\RW}{\myhi}\par\nobreak
+     \vskip -3\p@% Added -2pt vskip to correct for streched text v1.31
+    }
+  \renewcommand{\DOTI}[1]{%
+    \setlength{\mylen}{\textwidth}
+    \parskip=0pt plus 1pt % Set parskip to default, just in case v1.31
+    \addtolength{\mylen}{-2\RW}
+    {\vrule width\RW}\parbox{\mylen}{\CTV\FmTi{#1}}{\vrule width\RW}\par\nobreak%
+    \vskip -3pt\rule{\RW}{2\baselineskip}\mghrulefill{\RW}\rule{\RW}{2\baselineskip}%
+    \vskip 60\p@% Added -2pt in vskip to correct for streched text v1.31
+    }
+  \renewcommand{\DOTIS}[1]{%
+    \setlength{\py}{\fboxrule}
+    \setlength{\fboxrule}{\RW}
+    \setlength{\mylen}{\textwidth}
+    \addtolength{\mylen}{-2\RW}
+    \fbox{\parbox{\mylen}{\vskip 2\baselineskip\CTV\FmTi{#1}\par\nobreak\vskip \baselineskip}} 
+    \setlength{\fboxrule}{\py}
+    \vskip 60\p@
+    }
+  }
+
+\DeclareOption*{%
+  \PackageWarning{fancychapter}{unknown style option}
+  }
+
+\ProcessOptions* \relax
+
+\ifusecolor
+  \RequirePackage{color} 
+\fi
+\def\@makechapterhead#1{%
+  \vspace*{50\p@}%
+  {\parindent \z@ \raggedright \normalfont
+    \ifnum \c@secnumdepth >\m@ne
+      \if@mainmatter%%%%% Fix for frontmatter, mainmatter, and backmatter 040920
+        \DOCH
+      \fi
+    \fi
+    \interlinepenalty\@M
+    \if@mainmatter%%%%% Fix for frontmatter, mainmatter, and backmatter 060424
+      \DOTI{#1}%
+    \else%
+      \DOTIS{#1}%
+    \fi
+  }}
+
+
+%%% Begin: To avoid problem with scrbook.cls (fncychap version 1.32)
+
+%%OUT:
+%\def\@schapter#1{\if@twocolumn
+%                   \@topnewpage[\@makeschapterhead{#1}]%
+%                 \else
+%                   \@makeschapterhead{#1}%
+%                   \@afterheading
+%                 \fi}
+
+%%IN:
+\def\@schapter#1{%
+\if@twocolumn%
+  \@makeschapterhead{#1}%
+\else%
+  \@makeschapterhead{#1}%
+  \@afterheading%
+\fi}
+
+%%% End: To avoid problem with scrbook.cls (fncychap version 1.32)
+
+\def\@makeschapterhead#1{%
+  \vspace*{50\p@}%
+  {\parindent \z@ \raggedright
+    \normalfont
+    \interlinepenalty\@M
+    \DOTIS{#1}
+    \vskip 40\p@
+  }}
+
+\endinput
